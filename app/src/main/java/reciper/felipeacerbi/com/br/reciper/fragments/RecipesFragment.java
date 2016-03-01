@@ -1,10 +1,12 @@
 package reciper.felipeacerbi.com.br.reciper.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,12 +23,14 @@ import java.util.List;
 
 import reciper.felipeacerbi.com.br.reciper.R;
 import reciper.felipeacerbi.com.br.reciper.adapters.RecipesAdapter;
+import reciper.felipeacerbi.com.br.reciper.app.ReciperApplication;
+import reciper.felipeacerbi.com.br.reciper.interfaces.TaskManager;
 import reciper.felipeacerbi.com.br.reciper.models.Recipe;
 
 /**
  * Created by Felipe on 2/29/2016.
  */
-public class RecipesFragment extends Fragment {
+public class RecipesFragment extends Fragment implements ActionMode.Callback, TaskManager {
 
     /**
      * The fragment argument representing the section number for this
@@ -37,6 +41,13 @@ public class RecipesFragment extends Fragment {
     private RecyclerView recyclerView;
     private TextView emptyText;
     private LayoutManagerType currentLayoutManagerType;
+    private RecipesAdapter recipesAdapter;
+    private ActionMode actionMode;
+    private boolean isActionMode;
+    private List<Recipe> deleteList;
+    private boolean remove;
+    private TabLayout tabLayout;
+    private FloatingActionButton fab;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -59,6 +70,12 @@ public class RecipesFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        isActionMode = false;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
@@ -69,7 +86,7 @@ public class RecipesFragment extends Fragment {
         List<Recipe> recipes = new ArrayList<>();
         recipes.add(newRecipe);
 
-        RecipesAdapter recipesAdapter = new RecipesAdapter((AppCompatActivity) getActivity(), recipes);
+        RecipesAdapter recipesAdapter = new RecipesAdapter(this, recipes);
 
         recyclerView.setAdapter(recipesAdapter);
         checkEmptyList(recipesAdapter);
@@ -81,8 +98,10 @@ public class RecipesFragment extends Fragment {
 
         View recipesList = inflater.inflate(R.layout.fragment_recipes, container, false);
 
-        recyclerView = (RecyclerView) recipesList.findViewById(R.id.all_collections);
+        recyclerView = (RecyclerView) recipesList.findViewById(R.id.all_recipes);
         emptyText = (TextView) recipesList.findViewById(R.id.empty_text);
+        tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs);
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
 
         currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         setRecyclerViewLayoutManager(currentLayoutManagerType);
@@ -128,6 +147,66 @@ public class RecipesFragment extends Fragment {
     }
 
     @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.recipes_action_mode_menu, menu);
+
+        recipesAdapter = (RecipesAdapter) recyclerView.getAdapter();
+        actionMode = mode;
+
+        mode.setTitle(String.valueOf(1));
+        isActionMode = true;
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        // TODO Deprecated method for newer versions.
+//       context.getWindow().setStatusBarColor(context.getResources().getColor(R.color.colorAccentDark, null));
+        getActivity().getWindow().setStatusBarColor(getActivity().getResources().getColor(R.color.colorAccentDark));
+        return true;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_remove_collection:
+                deleteList = recipesAdapter.getSelectedItems();
+                recipesAdapter.notifyItemsRemoved();
+                remove = true;
+                Snackbar.make(getView().findViewById(R.id.all_recipes), getResources().getString(R.string.recipes_removed_snackbar), Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                recipesAdapter.notifyItemsInserted(deleteList);
+                                remove = false;
+                            }
+                        }).setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if(remove) {
+                            //new RemoveTask(CollectionStorageFragment.this).execute(deleteList);
+                        }
+                        super.onDismissed(snackbar, event);
+                    }
+                }).show();
+                mode.finish();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        // TODO Deprecated method for newer versions.
+//        context.getWindow().setStatusBarColor(context.getResources().getColor(R.color.colorPrimaryDark, null));
+        getActivity().getWindow().setStatusBarColor(getActivity().getResources().getColor(R.color.colorPrimaryDark));
+        recipesAdapter.deselectAll();
+        isActionMode = false;
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_recipes, menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -148,5 +227,30 @@ public class RecipesFragment extends Fragment {
         }
 
         return true;
+    }
+
+    @Override
+    public AppCompatActivity getAppCompatActivity() {
+        return (AppCompatActivity) getActivity();
+    }
+
+    @Override
+    public ReciperApplication getApp() {
+        return (ReciperApplication) getActivity().getApplication();
+    }
+
+    @Override
+    public ActionMode getActionMode() {
+        return actionMode;
+    }
+
+    @Override
+    public boolean isActionMode() {
+        return isActionMode;
+    }
+
+    @Override
+    public ActionMode.Callback getActionModeCallback() {
+        return this;
     }
 }

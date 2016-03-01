@@ -16,10 +16,20 @@
         android:scaleType="centerCrop"
         android:src="@drawable/cake"/>
 
+    <ImageView
+        android:id="@+id/add_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_add_shopping_cart_black_24dp"/>
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:paddingStart="96dp"
+        android:layout_toLeftOf="@id/add_recipe"
         android:layout_centerVertical="true"
         android:gravity="center"
         android:orientation="vertical">
