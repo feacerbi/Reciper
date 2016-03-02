@@ -6,4 +6,6 @@
     <color name="colorAccentDark">#FF3D00</color>
     <color name="fadeImage">#AAAAAAAA</color>
     <color name="noColor">#00000000</color>
+
+    <color name="whiteAlpha">#66FFFFFF</color>
 </resources>

@@ -11,7 +11,22 @@ public class Recipe {
     private String description;
     private String howTo;
     private String photoPath;
-    private int difficulty;
+    private int portions;
+    private int time;
+    private Difficulty difficulty;
+    private Category category;
+
+    public Recipe() {
+    }
+
+    public Recipe(String name, String description, int portions, int time, Difficulty difficulty, Category category) {
+        this.name = name;
+        this.portions = portions;
+        this.time = time;
+        this.difficulty = difficulty;
+        this.category = category;
+        this.description = description;
+    }
 
     public String getName() {
         return name;
@@ -45,11 +60,35 @@ public class Recipe {
         this.photoPath = photoPath;
     }
 
-    public int getDifficulty() {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(int difficulty) {
+    public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public int getPortions() {
+        return portions;
+    }
+
+    public void setPortions(int portions) {
+        this.portions = portions;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

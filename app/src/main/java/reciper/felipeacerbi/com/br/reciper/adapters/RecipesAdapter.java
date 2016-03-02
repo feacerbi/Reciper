@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,21 +36,30 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView titleField;
-        private final ImageView photoField;
+        private final TextView nameField;
         private final TextView descField;
+        private final ImageView photoField;
+        private final TextView portionsField;
+        private final TextView timeField;
+        private final TextView difficultyField;
+        private final TextView categoryField;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            titleField = (TextView) itemView.findViewById(R.id.item_title);
-            descField = (TextView) itemView.findViewById(R.id.item_description);
-            photoField = (ImageView) itemView.findViewById(R.id.item_image);
+            nameField = (TextView) itemView.findViewById(R.id.recipe_name);
+            descField = (TextView) itemView.findViewById(R.id.recipe_description);
+            photoField = (ImageView) itemView.findViewById(R.id.recipe_photo);
+            portionsField = (TextView) itemView.findViewById(R.id.recipe_portions);
+            timeField = (TextView) itemView.findViewById(R.id.recipe_time);
+            difficultyField = (TextView) itemView.findViewById(R.id.recipe_difficulty);
+            categoryField = (TextView) itemView.findViewById(R.id.recipe_category);
 
         }
 
-        public TextView getTitleField() {
-            return titleField;
+        public TextView getNameField() {
+            return nameField;
         }
 
         public TextView getDescField() {
@@ -58,6 +68,22 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
         public ImageView getPhotoField() {
             return photoField;
+        }
+
+        public TextView getPortionsField() {
+            return portionsField;
+        }
+
+        public TextView getTimeField() {
+            return timeField;
+        }
+
+        public TextView getDifficultyField() {
+            return difficultyField;
+        }
+
+        public TextView getCategoryField() {
+            return categoryField;
         }
     }
 
@@ -70,16 +96,20 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_list_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Recipe recipe = recipes.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Recipe recipe = getRecipes().get(position);
 
-        holder.getTitleField().setText(recipe.getName());
+        holder.getNameField().setText(recipe.getName());
         holder.getDescField().setText(recipe.getDescription());
+        holder.getPortionsField().setText(String.valueOf(recipe.getPortions()));
+        holder.getTimeField().setText(String.valueOf(recipe.getTime()));
+        holder.getDifficultyField().setText(recipe.getDifficulty().getName());
+        holder.getCategoryField().setText(recipe.getCategory().getName());
 
         if(selectedItems.get(position, false)) {
             holder.itemView.setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(R.color.fadeImage));
@@ -88,11 +118,21 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         }
 
         if(recipe.getPhotoPath() != null) {
-            Glide.with(tm.getAppCompatActivity())
-                    .load(recipe.getPhotoPath())
-                    .centerCrop()
-                    .into(holder.getPhotoField());
+            if(recipe.getPhotoPath() == "cake") {
+                Log.d("Acerbi", "cake1 " + recipe.getName());
+                Glide.with(tm.getAppCompatActivity())
+                        .load(R.drawable.cake)
+                        .centerCrop()
+                        .into(holder.getPhotoField());
+            } else {
+                Log.d("Acerbi", "salad " + recipe.getName());
+                Glide.with(tm.getAppCompatActivity())
+                        .load(R.drawable.salad)
+                        .centerCrop()
+                        .into(holder.getPhotoField());
+            }
         } else {
+            Log.d("Acerbi", "cake2");
             Glide.with(tm.getAppCompatActivity())
                     .load(R.drawable.cake)
                     .centerCrop()
@@ -111,7 +151,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 if (tm.isActionMode()) {
-                    select(position);
+                    select(holder.getAdapterPosition());
                 } else {
 //                    Intent intent = new Intent(activity, NewItemActivity.class);
 //                    intent.putExtra("collection_item", item);
@@ -126,7 +166,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             @Override
             public boolean onLongClick(View v) {
                 tm.getAppCompatActivity().startSupportActionMode(tm.getActionModeCallback());
-                select(position);
+                select(holder.getAdapterPosition());
                 return true;
             }
         });

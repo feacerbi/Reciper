@@ -25,6 +25,8 @@ import reciper.felipeacerbi.com.br.reciper.R;
 import reciper.felipeacerbi.com.br.reciper.adapters.RecipesAdapter;
 import reciper.felipeacerbi.com.br.reciper.app.ReciperApplication;
 import reciper.felipeacerbi.com.br.reciper.interfaces.TaskManager;
+import reciper.felipeacerbi.com.br.reciper.models.Category;
+import reciper.felipeacerbi.com.br.reciper.models.Difficulty;
 import reciper.felipeacerbi.com.br.reciper.models.Recipe;
 
 /**
@@ -79,17 +81,28 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
     public void onStart() {
         super.onStart();
 
-        Recipe newRecipe = new Recipe();
-        newRecipe.setName("Cake");
-        newRecipe.setDescription("Chocolate strawberry cake.");
+        Recipe newRecipe = new Recipe("Cake", "Chocolate strawberry cake.", 5, 30, new Difficulty(Difficulty.CASUAL), new Category(Category.DESSERTS));
+        newRecipe.setPhotoPath("cake");
+        Recipe newRecipe2 = new Recipe("Salad", "Blood orange salad with ginger.", 2, 15, new Difficulty(Difficulty.ADVANCED), new Category(Category.COURSES));
+        newRecipe2.setPhotoPath("salad");
 
         List<Recipe> recipes = new ArrayList<>();
+        recipes.add(newRecipe);
+        recipes.add(newRecipe2);
+        recipes.add(newRecipe);
+        recipes.add(newRecipe2);
         recipes.add(newRecipe);
 
         RecipesAdapter recipesAdapter = new RecipesAdapter(this, recipes);
 
         recyclerView.setAdapter(recipesAdapter);
         checkEmptyList(recipesAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fab.show();
     }
 
     @Override
