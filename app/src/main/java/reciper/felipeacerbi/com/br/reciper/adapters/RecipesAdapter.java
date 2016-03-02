@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -43,11 +44,13 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         private final TextView timeField;
         private final TextView difficultyField;
         private final TextView categoryField;
+        private final RelativeLayout fadeField;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            fadeField = (RelativeLayout) itemView.findViewById(R.id.fade_layout);
             nameField = (TextView) itemView.findViewById(R.id.recipe_name);
             descField = (TextView) itemView.findViewById(R.id.recipe_description);
             photoField = (ImageView) itemView.findViewById(R.id.recipe_photo);
@@ -85,6 +88,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         public TextView getCategoryField() {
             return categoryField;
         }
+
+        public RelativeLayout getFadeField() {
+            return fadeField;
+        }
     }
 
     public RecipesAdapter(TaskManager tm, List<Recipe> recipes) {
@@ -107,14 +114,14 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         holder.getNameField().setText(recipe.getName());
         holder.getDescField().setText(recipe.getDescription());
         holder.getPortionsField().setText(String.valueOf(recipe.getPortions()));
-        holder.getTimeField().setText(String.valueOf(recipe.getTime()));
+        holder.getTimeField().setText(recipe.getTime());
         holder.getDifficultyField().setText(recipe.getDifficulty().getName());
         holder.getCategoryField().setText(recipe.getCategory().getName());
 
         if(selectedItems.get(position, false)) {
-            holder.itemView.setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(R.color.fadeImage));
+            holder.getFadeField().setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(R.color.fadeImage));
         } else {
-            holder.itemView.setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(android.R.color.transparent));
+            holder.getFadeField().setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(android.R.color.transparent));
         }
 
         if(recipe.getPhotoPath() != null) {

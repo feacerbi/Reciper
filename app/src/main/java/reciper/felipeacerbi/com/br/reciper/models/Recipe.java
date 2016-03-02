@@ -12,14 +12,14 @@ public class Recipe {
     private String howTo;
     private String photoPath;
     private int portions;
-    private int time;
+    private String time;
     private Difficulty difficulty;
     private Category category;
 
     public Recipe() {
     }
 
-    public Recipe(String name, String description, int portions, int time, Difficulty difficulty, Category category) {
+    public Recipe(String name, String description, int portions, String time, Difficulty difficulty, Category category) {
         this.name = name;
         this.portions = portions;
         this.time = time;
@@ -84,11 +84,11 @@ public class Recipe {
         this.category = category;
     }
 
-    public int getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(String time) {
         this.time = time;
     }
 }

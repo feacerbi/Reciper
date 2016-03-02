@@ -58,6 +58,7 @@ public class Recipes extends AppCompatActivity {
     }
 
     public void setToolbar() {
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -70,6 +71,10 @@ public class Recipes extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_import_contacts_white_24dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_shopping_cart_white_24dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_history_white_24dp);
     }
 
     @Override

@@ -16,6 +16,7 @@
         card_view:cardCornerRadius="5dp">
 
         <RelativeLayout
+            android:id="@+id/fade_layout"
             android:layout_width="match_parent"
             android:layout_height="220dp">
 
@@ -60,7 +61,7 @@
                     android:layout_marginStart="6dp"
                     android:layout_gravity="center_vertical"
                     android:alpha="0.5"
-                    android:src="@drawable/ic_timelapse_black_24dp"/>
+                    android:src="@drawable/ic_alarm_black_24dp"/>
                 <TextView
                     android:id="@+id/recipe_time"
                     android:gravity="center_vertical"

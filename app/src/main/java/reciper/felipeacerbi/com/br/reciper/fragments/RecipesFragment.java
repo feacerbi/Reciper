@@ -48,7 +48,6 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
     private boolean isActionMode;
     private List<Recipe> deleteList;
     private boolean remove;
-    private TabLayout tabLayout;
     private FloatingActionButton fab;
 
     private enum LayoutManagerType {
@@ -81,9 +80,9 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
     public void onStart() {
         super.onStart();
 
-        Recipe newRecipe = new Recipe("Cake", "Chocolate strawberry cake.", 5, 30, new Difficulty(Difficulty.CASUAL), new Category(Category.DESSERTS));
+        Recipe newRecipe = new Recipe("Cake", "Chocolate strawberry cake.", 5, "30min", new Difficulty(Difficulty.CASUAL), new Category(Category.DESSERTS));
         newRecipe.setPhotoPath("cake");
-        Recipe newRecipe2 = new Recipe("Salad", "Blood orange salad with ginger.", 2, 15, new Difficulty(Difficulty.ADVANCED), new Category(Category.COURSES));
+        Recipe newRecipe2 = new Recipe("Salad", "Blood orange salad with ginger.", 2, "15min", new Difficulty(Difficulty.ADVANCED), new Category(Category.COURSES));
         newRecipe2.setPhotoPath("salad");
 
         List<Recipe> recipes = new ArrayList<>();
@@ -113,8 +112,31 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
 
         recyclerView = (RecyclerView) recipesList.findViewById(R.id.all_recipes);
         emptyText = (TextView) recipesList.findViewById(R.id.empty_text);
-        tabLayout = (TabLayout) getActivity().findViewById(R.id.tabs);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy > 0) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
+            }
+        });
+
+        /* API 23
+        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY > oldScrollY) {
+                    fab.show();
+                } else {
+                    fab.hide();
+                }
+            }
+        }); */
 
         currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         setRecyclerViewLayoutManager(currentLayoutManagerType);
