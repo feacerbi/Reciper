@@ -2,6 +2,7 @@ package reciper.felipeacerbi.com.br.reciper.adapters;
 
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -24,13 +25,13 @@ import reciper.felipeacerbi.com.br.reciper.interfaces.TaskManager;
  */
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 
-    FragmentManager fm;
-    AppCompatActivity activity;
+    private FragmentManager fragmentManager;
+    private AppCompatActivity activity;
 
-    public SectionsPageAdapter(AppCompatActivity activity, FragmentManager fm) {
-        super(fm);
+    public SectionsPageAdapter(AppCompatActivity activity, FragmentManager fragmentManager) {
+        super(fragmentManager);
         this.activity = activity;
-        this.fm = fm;
+        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -56,30 +57,6 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-//        int title;
-//        switch (position) {
-//            case 0:
-//                title = R.drawable.ic_import_contacts_black_24dp;
-//                break;
-//            case 1:
-//                title = R.drawable.ic_add_shopping_cart_black_24dp;
-//                break;
-//            case 2:
-//                title = R.drawable.ic_history_black_24dp;
-//                break;
-//            default:
-//                return null;
-//        }
-//
-//        // Generate title based on item position
-//        Drawable image = ContextCompat.getDrawable(activity, title);
-//        image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
-//        // Replace blank spaces with image icon
-//        SpannableString sb = new SpannableString(" ");
-//        ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
-//        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//
-//        return sb;
         return null;
     }
 }

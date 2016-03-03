@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,11 +34,14 @@ public class Recipes extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPageAdapter sectionsPageAdapter;
+    public static int TAB_NOT_SELECTED_COLOR = 100;
+    public static int TAB_SELECTED_COLOR = 255;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +73,37 @@ public class Recipes extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPageAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setAlpha(TAB_SELECTED_COLOR);
+            }
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_import_contacts_white_24dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_shopping_cart_white_24dp);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_history_white_24dp);
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tab.getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        createTab(R.drawable.ic_import_contacts_white_24dp, 0);
+        createTab(R.drawable.ic_shopping_cart_white_24dp, 1);
+        createTab(R.drawable.ic_history_white_24dp, 2);
+        selectTab();
+    }
+
+    public void createTab(int iconResource, int position) {
+        tabLayout.getTabAt(position).setIcon(iconResource).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
+    }
+
+    public void selectTab() {
+        tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setAlpha(TAB_SELECTED_COLOR);
     }
 
     @Override
