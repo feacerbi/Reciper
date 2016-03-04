@@ -7,6 +7,7 @@ import java.util.HashMap;
  */
 public class Recipe {
 
+    private long id;
     private String name;
     private String description;
     private String howTo;
@@ -26,6 +27,14 @@ public class Recipe {
         this.difficulty = difficulty;
         this.category = category;
         this.description = description;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

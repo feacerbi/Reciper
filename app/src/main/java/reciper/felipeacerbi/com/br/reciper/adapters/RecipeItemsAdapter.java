@@ -17,16 +17,18 @@ import java.util.List;
 
 import reciper.felipeacerbi.com.br.reciper.R;
 import reciper.felipeacerbi.com.br.reciper.interfaces.TaskManager;
+import reciper.felipeacerbi.com.br.reciper.models.Ingredient;
 import reciper.felipeacerbi.com.br.reciper.models.Recipe;
+import reciper.felipeacerbi.com.br.reciper.models.RecipeItem;
 
 /**
  * Created by felipe.acerbi on 28/09/2015.
  */
-public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
+public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.ViewHolder> {
 
     private final TaskManager tm;
     private final SparseBooleanArray selectedItems;
-    private List<Recipe> recipes;
+    private List<RecipeItem> recipeItems;
     private SparseBooleanArray oldSelectedPositions;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,10 +36,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         private final TextView nameField;
         private final TextView descField;
         private final ImageView photoField;
-        private final TextView portionsField;
-        private final TextView timeField;
-        private final TextView difficultyField;
-        private final TextView categoryField;
         private final RelativeLayout fadeField;
 
 
@@ -48,10 +46,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             nameField = (TextView) itemView.findViewById(R.id.recipe_name);
             descField = (TextView) itemView.findViewById(R.id.recipe_description);
             photoField = (ImageView) itemView.findViewById(R.id.recipe_photo);
-            portionsField = (TextView) itemView.findViewById(R.id.recipe_portions);
-            timeField = (TextView) itemView.findViewById(R.id.recipe_time);
-            difficultyField = (TextView) itemView.findViewById(R.id.recipe_difficulty);
-            categoryField = (TextView) itemView.findViewById(R.id.recipe_category);
 
         }
 
@@ -67,30 +61,14 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             return photoField;
         }
 
-        public TextView getPortionsField() {
-            return portionsField;
-        }
-
-        public TextView getTimeField() {
-            return timeField;
-        }
-
-        public TextView getDifficultyField() {
-            return difficultyField;
-        }
-
-        public TextView getCategoryField() {
-            return categoryField;
-        }
-
         public RelativeLayout getFadeField() {
             return fadeField;
         }
     }
 
-    public RecipesAdapter(TaskManager tm, List<Recipe> recipes) {
+    public RecipeItemsAdapter(TaskManager tm, List<RecipeItem> recipeItems) {
         this.tm = tm;
-        this.recipes = recipes;
+        this.recipeItems = recipeItems;
         selectedItems = new SparseBooleanArray();
         oldSelectedPositions = new SparseBooleanArray();
     }
@@ -103,14 +81,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Recipe recipe = getRecipes().get(position);
+        final RecipeItem recipeItem = getRecipeItems().get(position);
+        Ingredient ingredient = recipeItem.getIngredient();
 
-        holder.getNameField().setText(recipe.getName());
-        holder.getDescField().setText(recipe.getDescription());
-        holder.getPortionsField().setText(String.valueOf(recipe.getPortions()));
-        holder.getTimeField().setText(recipe.getTime());
-        holder.getDifficultyField().setText(recipe.getDifficulty().getName());
-        holder.getCategoryField().setText(recipe.getCategory().getName());
+        holder.getNameField().setText(ingredient.getName());
+        holder.getDescField().setText(ingredient.getDescription());
 
         if(selectedItems.get(position, false)) {
             holder.getFadeField().setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(R.color.fadeImage));
@@ -118,15 +93,15 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             holder.getFadeField().setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(android.R.color.transparent));
         }
 
-        if(recipe.getPhotoPath() != null) {
-            if(recipe.getPhotoPath() == "cake") {
-                Log.d("Acerbi", "cake1 " + recipe.getName() + " Position:" + position);
+        if(ingredient.getPhotoPath() != null) {
+            if(ingredient.getPhotoPath() == "cake") {
+                Log.d("Acerbi", "cake1 " + ingredient.getName() + " Position:" + position);
                 Glide.with(tm.getAppCompatActivity())
                         .load(R.drawable.cake)
                         .centerCrop()
                         .into(holder.getPhotoField());
             } else {
-                Log.d("Acerbi", "salad " + recipe.getName() + " Position:" + position);
+                Log.d("Acerbi", "salad " + ingredient.getName() + " Position:" + position);
                 Glide.with(tm.getAppCompatActivity())
                         .load(R.drawable.salad)
                         .centerCrop()
@@ -172,13 +147,13 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         });
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public List<RecipeItem> getRecipeItems() {
+        return recipeItems;
     }
 
     @Override
     public int getItemCount() {
-        return recipes.size();
+        return recipeItems.size();
     }
 
     public void select(int position) {
@@ -201,10 +176,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
     public int getSelectedItemsCount(){ return selectedItems.size(); }
 
-    public List<Recipe> getSelectedItems() {
-        List<Recipe> selectedObjects = new ArrayList<>(getSelectedItemsCount());
+    public List<RecipeItem> getSelectedItems() {
+        List<RecipeItem> selectedObjects = new ArrayList<>(getSelectedItemsCount());
         for (int i = 0; i < getSelectedItemsCount(); i++) {
-            selectedObjects.add(getRecipes().get(selectedItems.keyAt(i)));
+            selectedObjects.add(getRecipeItems().get(selectedItems.keyAt(i)));
         }
         return selectedObjects;
     }
@@ -215,20 +190,20 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, getItemCount());
         }
-        getRecipes().removeAll(getSelectedItems());
+        getRecipeItems().removeAll(getSelectedItems());
     }
 
-    public void notifyItemsInserted(List<Recipe> recipes) {
+    public void notifyItemsInserted(List<RecipeItem> ingredients) {
         for(int i = 0; i < oldSelectedPositions.size(); i++) {
             int position = oldSelectedPositions.keyAt(i);
-            getRecipes().add(position, recipes.get(i));
+            getRecipeItems().add(position, ingredients.get(i));
             notifyItemInserted(position);
             notifyItemRangeChanged(position, getItemCount());
         }
     }
 
-    public void notifyNewItemInserted(Recipe recipe) {
-        getRecipes().add(recipe);
+    public void notifyNewItemInserted(RecipeItem recipeItem) {
+        getRecipeItems().add(recipeItem);
         int position = getItemCount();
         notifyItemInserted(position);
         notifyItemRangeChanged(position, getItemCount());

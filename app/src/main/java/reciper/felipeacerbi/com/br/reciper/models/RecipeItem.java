@@ -7,8 +7,17 @@ public class RecipeItem {
 
     private Ingredient ingredient;
     private int measure;
-    private Unit unit;
-    private long recipeId;
+    private int unit;
+    private long cartId;
+
+    public RecipeItem() {
+    }
+
+    public RecipeItem(Ingredient ingredient, int measure, int unit) {
+        this.ingredient = ingredient;
+        this.measure = measure;
+        this.unit = unit;
+    }
 
     public Ingredient getIngredient() {
         return ingredient;
@@ -26,19 +35,19 @@ public class RecipeItem {
         this.measure = measure;
     }
 
-    public Unit getUnit() {
+    public int getUnit() {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
+    public void setUnit(int unit) {
         this.unit = unit;
     }
 
-    public long getRecipeId() {
-        return recipeId;
+    public long getCartId() {
+        return cartId;
     }
 
-    public void setRecipeId(long recipeId) {
-        this.recipeId = recipeId;
+    public void setCartId(long cartId) {
+        this.cartId = cartId;
     }
 }

@@ -13,6 +13,7 @@ public class Unit {
     public static int KILOGRAM = 5;
     public static int OZ = 6;
 
+    private long id;
     private int type;
 
 }

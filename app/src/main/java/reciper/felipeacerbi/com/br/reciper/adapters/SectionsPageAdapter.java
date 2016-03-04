@@ -1,24 +1,13 @@
 package reciper.felipeacerbi.com.br.reciper.adapters;
 
-import android.graphics.drawable.Drawable;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
-import android.widget.Toast;
 
-import reciper.felipeacerbi.com.br.reciper.R;
-import reciper.felipeacerbi.com.br.reciper.activities.Recipes;
 import reciper.felipeacerbi.com.br.reciper.fragments.CartFragment;
 import reciper.felipeacerbi.com.br.reciper.fragments.HistoryFragment;
 import reciper.felipeacerbi.com.br.reciper.fragments.RecipesFragment;
-import reciper.felipeacerbi.com.br.reciper.interfaces.TaskManager;
 
 /**
  * Created by Felipe on 2/29/2016.
@@ -37,6 +26,7 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
+        int test = 10;
         switch (position) {
             case 0:
                 return RecipesFragment.newInstance(position + 1);

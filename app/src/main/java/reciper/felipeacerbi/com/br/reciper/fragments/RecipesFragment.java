@@ -10,6 +10,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import reciper.felipeacerbi.com.br.reciper.R;
+import reciper.felipeacerbi.com.br.reciper.activities.RecipesActivity;
 import reciper.felipeacerbi.com.br.reciper.adapters.RecipesAdapter;
 import reciper.felipeacerbi.com.br.reciper.app.ReciperApplication;
 import reciper.felipeacerbi.com.br.reciper.interfaces.TaskManager;
@@ -49,6 +51,7 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
     private List<Recipe> deleteList;
     private boolean remove;
     private FloatingActionButton fab;
+    RecipesActivity recipesActivity;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -73,6 +76,7 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        recipesActivity = (RecipesActivity) getAppCompatActivity();
         isActionMode = false;
     }
 
@@ -92,7 +96,7 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
         recipes.add(newRecipe2);
         recipes.add(newRecipe);
 
-        RecipesAdapter recipesAdapter = new RecipesAdapter(this, recipes);
+        recipesAdapter = new RecipesAdapter(this, recipes);
 
         recyclerView.setAdapter(recipesAdapter);
         checkEmptyList(recipesAdapter);

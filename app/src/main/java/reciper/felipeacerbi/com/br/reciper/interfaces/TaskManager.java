@@ -3,6 +3,7 @@ package reciper.felipeacerbi.com.br.reciper.interfaces;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import reciper.felipeacerbi.com.br.reciper.app.ReciperApplication;
+import reciper.felipeacerbi.com.br.reciper.models.Cart;
 
 /**
  * Created by felipe.acerbi on 17/02/2016.

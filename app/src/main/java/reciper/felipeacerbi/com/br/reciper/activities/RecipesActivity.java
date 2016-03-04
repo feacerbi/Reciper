@@ -22,8 +22,9 @@ import android.widget.TextView;
 
 import reciper.felipeacerbi.com.br.reciper.R;
 import reciper.felipeacerbi.com.br.reciper.adapters.SectionsPageAdapter;
+import reciper.felipeacerbi.com.br.reciper.models.Cart;
 
-public class Recipes extends AppCompatActivity {
+public class RecipesActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -33,7 +34,6 @@ public class Recipes extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPageAdapter sectionsPageAdapter;
     public static int TAB_NOT_SELECTED_COLOR = 100;
     public static int TAB_SELECTED_COLOR = 255;
 
@@ -42,11 +42,15 @@ public class Recipes extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private TabLayout tabLayout;
+    private SectionsPageAdapter sectionsPageAdapter;
+    private Cart cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
+
+        cart = new Cart();
 
         setToolbar();
 
@@ -104,6 +108,14 @@ public class Recipes extends AppCompatActivity {
 
     public void selectTab() {
         tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setAlpha(TAB_SELECTED_COLOR);
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     @Override

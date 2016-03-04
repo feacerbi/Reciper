@@ -5,9 +5,26 @@ package reciper.felipeacerbi.com.br.reciper.models;
  */
 public class Ingredient {
 
+    private long id;
     private String name;
     private String description;
     private String photoPath;
+
+    public Ingredient() {
+    }
+
+    public Ingredient(String description, String name) {
+        this.description = description;
+        this.name = name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
