@@ -36,16 +36,18 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
         private final TextView nameField;
         private final TextView descField;
         private final ImageView photoField;
-        private final RelativeLayout fadeField;
+        private final TextView quantField;
+        private final TextView unitField;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            fadeField = (RelativeLayout) itemView.findViewById(R.id.fade_layout);
-            nameField = (TextView) itemView.findViewById(R.id.recipe_name);
-            descField = (TextView) itemView.findViewById(R.id.recipe_description);
-            photoField = (ImageView) itemView.findViewById(R.id.recipe_photo);
+            nameField = (TextView) itemView.findViewById(R.id.ingredient_name);
+            descField = (TextView) itemView.findViewById(R.id.ingredient_description);
+            quantField = (TextView) itemView.findViewById(R.id.ingredient_quantity);
+            unitField = (TextView) itemView.findViewById(R.id.ingredient_unit);
+            photoField = (ImageView) itemView.findViewById(R.id.ingredient_image);
 
         }
 
@@ -61,8 +63,12 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
             return photoField;
         }
 
-        public RelativeLayout getFadeField() {
-            return fadeField;
+        public TextView getQuantField() {
+            return quantField;
+        }
+
+        public TextView getUnitField() {
+            return unitField;
         }
     }
 
@@ -75,7 +81,8 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_item, parent, false);
+        Log.d("Acerbi", "View parent: " + parent);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_list_item, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -83,34 +90,35 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final RecipeItem recipeItem = getRecipeItems().get(position);
         Ingredient ingredient = recipeItem.getIngredient();
+        Log.d("Acerbi", "View: " + holder.itemView);
 
         holder.getNameField().setText(ingredient.getName());
         holder.getDescField().setText(ingredient.getDescription());
+        holder.getQuantField().setText(String.valueOf(recipeItem.getQuantity()));
+        holder.getUnitField().setText(" " + recipeItem.getUnit());
 
         if(selectedItems.get(position, false)) {
-            holder.getFadeField().setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(R.color.fadeImage));
+            holder.itemView.setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(R.color.fadeImage));
         } else {
-            holder.getFadeField().setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(android.R.color.transparent));
+            holder.itemView.setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(android.R.color.transparent));
         }
 
         if(ingredient.getPhotoPath() != null) {
-            if(ingredient.getPhotoPath() == "cake") {
-                Log.d("Acerbi", "cake1 " + ingredient.getName() + " Position:" + position);
+            if(ingredient.getPhotoPath().equals("chocolate")) {
                 Glide.with(tm.getAppCompatActivity())
-                        .load(R.drawable.cake)
-                        .centerCrop()
+                        .load(R.drawable.chocolate_bar)
+                        .fitCenter()
                         .into(holder.getPhotoField());
             } else {
-                Log.d("Acerbi", "salad " + ingredient.getName() + " Position:" + position);
                 Glide.with(tm.getAppCompatActivity())
-                        .load(R.drawable.salad)
-                        .centerCrop()
+                        .load(R.drawable.sugar)
+                        .fitCenter()
                         .into(holder.getPhotoField());
             }
         } else {
             Glide.with(tm.getAppCompatActivity())
-                    .load(R.drawable.cake)
-                    .centerCrop()
+                    .load(R.drawable.sugar)
+                    .fitCenter()
                     .into(holder.getPhotoField());
         }
 

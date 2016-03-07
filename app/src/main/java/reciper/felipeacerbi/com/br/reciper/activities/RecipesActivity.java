@@ -44,6 +44,7 @@ public class RecipesActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private SectionsPageAdapter sectionsPageAdapter;
     private Cart cart;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +78,26 @@ public class RecipesActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPageAdapter);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.getIcon().setAlpha(TAB_SELECTED_COLOR);
+                switch (tab.getPosition()) {
+                    case 0:
+                        fab.setImageResource(R.drawable.plus_sign);
+                        break;
+                    case 1:
+                        fab.setImageResource(R.drawable.ic_done_white_24dp);
+                        break;
+                    case 2:
+                        fab.setImageResource(R.drawable.ic_replay_white_24dp);
+                        break;
+                }
+                fab.show();
             }
 
             @Override

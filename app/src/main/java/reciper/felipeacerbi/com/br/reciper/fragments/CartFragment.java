@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -83,13 +84,13 @@ public class CartFragment extends Fragment implements ActionMode.Callback, TaskM
     public void onStart() {
         super.onStart();
 
-        Ingredient ingredient = new Ingredient("Chocolate Bar", "Bar of milk chocolate.");
-        ingredient.setPhotoPath("cake");
-        Ingredient ingredient2 = new Ingredient("Sugar", "Refined sugar.");
-        ingredient.setPhotoPath("salad");
+        Ingredient ingredient = new Ingredient("Chocolate Bar", "Milk chocolate bar");
+        ingredient.setPhotoPath("chocolate");
+        Ingredient ingredient2 = new Ingredient("Sugar", "Refined sugar");
+        ingredient.setPhotoPath("sugar");
 
-        RecipeItem recipeItem = new RecipeItem(ingredient, 20, Unit.GRAM);
-        RecipeItem recipeItem2 = new RecipeItem(ingredient2, 60, Unit.MILLILITER);
+        RecipeItem recipeItem = new RecipeItem(ingredient, 200, Unit.OZ);
+        RecipeItem recipeItem2 = new RecipeItem(ingredient2, 150, Unit.MILLILITER);
 
         recipesActivity.getCart().getRecipeItems().add(recipeItem);
         recipesActivity.getCart().getRecipeItems().add(recipeItem2);
@@ -110,9 +111,9 @@ public class CartFragment extends Fragment implements ActionMode.Callback, TaskM
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View ingredientsList = inflater.inflate(R.layout.fragment_recipes, container, false);
+        View ingredientsList = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        recyclerView = (RecyclerView) ingredientsList.findViewById(R.id.all_recipes);
+        recyclerView = (RecyclerView) ingredientsList.findViewById(R.id.all_items);
         emptyText = (TextView) ingredientsList.findViewById(R.id.empty_text);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
 

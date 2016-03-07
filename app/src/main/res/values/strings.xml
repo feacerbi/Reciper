@@ -9,5 +9,6 @@
     <string name="tab_name_cart">Cart</string>
     <string name="tab_name_history">History</string>
 
-    <string name="empty_recipes">Add a new recipe</string>
+    <string name="empty_recipes">Add a new recipe.</string>
+    <string name="empty_cart">Add a new item into cart.</string>
 </resources>

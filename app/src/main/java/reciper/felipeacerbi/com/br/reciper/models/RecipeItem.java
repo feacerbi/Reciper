@@ -6,16 +6,16 @@ package reciper.felipeacerbi.com.br.reciper.models;
 public class RecipeItem {
 
     private Ingredient ingredient;
-    private int measure;
-    private int unit;
+    private int quantity;
+    private String unit;
     private long cartId;
 
     public RecipeItem() {
     }
 
-    public RecipeItem(Ingredient ingredient, int measure, int unit) {
+    public RecipeItem(Ingredient ingredient, int quantity, String unit) {
         this.ingredient = ingredient;
-        this.measure = measure;
+        this.quantity = quantity;
         this.unit = unit;
     }
 
@@ -27,19 +27,19 @@ public class RecipeItem {
         this.ingredient = ingredient;
     }
 
-    public int getMeasure() {
-        return measure;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setMeasure(int measure) {
-        this.measure = measure;
+    public void setQuantity(int measure) {
+        this.quantity = quantity;
     }
 
-    public int getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(int unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 

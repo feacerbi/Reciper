@@ -45,7 +45,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
-        android:src="@drawable/plus_sign"/>
+        app:pressedTranslationZ="12dp"/>
 
 </android.support.design.widget.CoordinatorLayout>
