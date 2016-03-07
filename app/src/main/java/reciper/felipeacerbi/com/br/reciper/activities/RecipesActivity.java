@@ -34,17 +34,18 @@ public class RecipesActivity extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    public static int TAB_NOT_SELECTED_COLOR = 100;
-    public static int TAB_SELECTED_COLOR = 255;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private ViewPager viewPager;
     private TabLayout tabLayout;
     private SectionsPageAdapter sectionsPageAdapter;
     private Cart cart;
     private FloatingActionButton fab;
+    private TabLayout.Tab recipesTab;
+    private TabLayout.Tab cartTab;
+    private TabLayout.Tab historyTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,51 +76,25 @@ public class RecipesActivity extends AppCompatActivity {
         sectionsPageAdapter = new SectionsPageAdapter(this, getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(sectionsPageAdapter);
+        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPageAdapter);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                tab.getIcon().setAlpha(TAB_SELECTED_COLOR);
-                switch (tab.getPosition()) {
-                    case 0:
-                        fab.setImageResource(R.drawable.plus_sign);
-                        break;
-                    case 1:
-                        fab.setImageResource(R.drawable.ic_done_white_24dp);
-                        break;
-                    case 2:
-                        fab.setImageResource(R.drawable.ic_replay_white_24dp);
-                        break;
-                }
-                fab.show();
-            }
+        tabLayout.setupWithViewPager(viewPager);
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                tab.getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        createTab(R.drawable.ic_import_contacts_white_24dp, 0);
-        createTab(R.drawable.ic_shopping_cart_white_24dp, 1);
-        createTab(R.drawable.ic_history_white_24dp, 2);
-        selectTab();
+//        recipesTab = createTab(R.drawable.ic_import_contacts_white_24dp, 0);
+//        cartTab = createTab(R.drawable.ic_shopping_cart_white_24dp, 1);
+//        historyTab = createTab(R.drawable.ic_history_white_24dp, 2);
+        //selectTab();
     }
 
-    public void createTab(int iconResource, int position) {
-        tabLayout.getTabAt(position).setIcon(iconResource).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
-    }
+//    public TabLayout.Tab createTab(int iconResource, int position) {
+//        TabLayout.Tab tab = tabLayout.getTabAt(position);
+//        tab.setIcon(iconResource).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
+//        return tab;
+//    }
 
     public void selectTab() {
         tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setAlpha(TAB_SELECTED_COLOR);

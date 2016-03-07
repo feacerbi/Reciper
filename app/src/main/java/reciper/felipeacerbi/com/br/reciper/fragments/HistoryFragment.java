@@ -1,6 +1,7 @@
 package reciper.felipeacerbi.com.br.reciper.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ public class HistoryFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private FloatingActionButton fab;
 
     public HistoryFragment() {
     }
@@ -36,10 +38,18 @@ public class HistoryFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        fab.hide();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         textView.setText("History section: " + getArguments().getInt(ARG_SECTION_NUMBER));
         return rootView;
     }

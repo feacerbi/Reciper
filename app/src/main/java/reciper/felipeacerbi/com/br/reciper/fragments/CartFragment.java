@@ -104,6 +104,7 @@ public class CartFragment extends Fragment implements ActionMode.Callback, TaskM
     @Override
     public void onResume() {
         super.onResume();
+        fab.setImageResource(R.drawable.ic_done_white_24dp);
         fab.show();
     }
 
