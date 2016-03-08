@@ -1,5 +1,6 @@
 package reciper.felipeacerbi.com.br.reciper.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,7 +23,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import reciper.felipeacerbi.com.br.reciper.Constants;
 import reciper.felipeacerbi.com.br.reciper.R;
+import reciper.felipeacerbi.com.br.reciper.activities.NewRecipeActivity;
 import reciper.felipeacerbi.com.br.reciper.activities.RecipesActivity;
 import reciper.felipeacerbi.com.br.reciper.adapters.RecipesAdapter;
 import reciper.felipeacerbi.com.br.reciper.app.ReciperApplication;
@@ -118,6 +121,14 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
         recyclerView = (RecyclerView) recipesList.findViewById(R.id.all_recipes);
         emptyText = (TextView) recipesList.findViewById(R.id.empty_text);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getAppCompatActivity(), NewRecipeActivity.class);
+                startActivityForResult(intent, Constants.REQUEST_NEW_RECIPE);
+            }
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
