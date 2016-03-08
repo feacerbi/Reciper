@@ -31,7 +31,7 @@
 
     <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/CustomTextAppearance</item>
-        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
     <style name="CustomTextAppearance" parent="TextAppearance.Design.Tab">

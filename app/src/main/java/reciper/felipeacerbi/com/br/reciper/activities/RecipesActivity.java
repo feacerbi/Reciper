@@ -71,33 +71,16 @@ public class RecipesActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        sectionsPageAdapter = new SectionsPageAdapter(this, getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         viewPager = (ViewPager) findViewById(R.id.container);
-        viewPager.setAdapter(sectionsPageAdapter);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        sectionsPageAdapter = new SectionsPageAdapter(this, getSupportFragmentManager(), viewPager, tabLayout);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-//        recipesTab = createTab(R.drawable.ic_import_contacts_white_24dp, 0);
-//        cartTab = createTab(R.drawable.ic_shopping_cart_white_24dp, 1);
-//        historyTab = createTab(R.drawable.ic_history_white_24dp, 2);
-        //selectTab();
-    }
-
-//    public TabLayout.Tab createTab(int iconResource, int position) {
-//        TabLayout.Tab tab = tabLayout.getTabAt(position);
-//        tab.setIcon(iconResource).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
-//        return tab;
-//    }
-
-    public void selectTab() {
-        tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getIcon().setAlpha(TAB_SELECTED_COLOR);
     }
 
     public Cart getCart() {

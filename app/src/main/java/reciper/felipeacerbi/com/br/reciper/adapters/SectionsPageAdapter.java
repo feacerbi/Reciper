@@ -4,7 +4,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import reciper.felipeacerbi.com.br.reciper.fragments.RecipesFragment;
 /**
  * Created by Felipe on 2/29/2016.
  */
-public class SectionsPageAdapter extends FragmentPagerAdapter {
+public class SectionsPageAdapter extends FragmentPagerAdapter implements TabLayout.OnTabSelectedListener {
 
     public static int TAB_NOT_SELECTED_COLOR = 100;
     public static int TAB_SELECTED_COLOR = 255;
@@ -28,6 +30,11 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
     private FragmentManager fragmentManager;
     private AppCompatActivity activity;
     private List<Fragment> fragmentList;
+    private int[] tabIcons = {
+            R.drawable.ic_import_contacts_white_24dp,
+            R.drawable.ic_shopping_cart_white_24dp,
+            R.drawable.ic_history_white_24dp
+    };
 
     public SectionsPageAdapter(AppCompatActivity activity, FragmentManager fragmentManager, ViewPager viewPager, final TabLayout tabLayout) {
         super(fragmentManager);
@@ -37,28 +44,26 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
         this.tabLayout = tabLayout;
 
         fragmentList = new ArrayList<>();
-        fragmentList.add(RecipesFragment.newInstance(1));
-        fragmentList.add(CartFragment.newInstance(2));
-        fragmentList.add(HistoryFragment.newInstance(3));
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        setTabs();
+    }
 
-            }
+    public void setTabs() {
+        viewPager.setAdapter(this);
+        tabLayout.setupWithViewPager(viewPager);
 
-            @Override
-            public void onPageSelected(int position) {
-                TabLayout.Tab tab = tabLayout.getTabAt(position);
-                tab.getIcon().setAlpha(TAB_SELECTED_COLOR);
-                fragmentList.get(position).onResume();
-            }
+        addTab(RecipesFragment.newInstance(1), 0);
+        addTab(CartFragment.newInstance(2), 1);
+        addTab(HistoryFragment.newInstance(3), 2);
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+        tabLayout.setOnTabSelectedListener(this);
 
-            }
-        });
+        viewPager.setCurrentItem(0);
+    }
+
+    public void addTab(Fragment fragment, int position) {
+        fragmentList.add(position, fragment);
+        tabLayout.getTabAt(position).setIcon(tabIcons[position]).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
     }
 
     @Override
@@ -70,11 +75,28 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 3 total pages.
-        return 3;
+        return fragmentList.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         return null;
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        int position = tab.getPosition();
+        tab.getIcon().setAlpha(TAB_SELECTED_COLOR);
+        fragmentList.get(position).onResume();
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        tab.getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }
