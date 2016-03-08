@@ -35,6 +35,9 @@ public class SectionsPageAdapter extends FragmentPagerAdapter implements TabLayo
             R.drawable.ic_shopping_cart_white_24dp,
             R.drawable.ic_history_white_24dp
     };
+    private TabLayout.Tab recipesTab;
+    private TabLayout.Tab cartTab;
+    private TabLayout.Tab historyTab;
 
     public SectionsPageAdapter(AppCompatActivity activity, FragmentManager fragmentManager, ViewPager viewPager, final TabLayout tabLayout) {
         super(fragmentManager);
@@ -52,18 +55,23 @@ public class SectionsPageAdapter extends FragmentPagerAdapter implements TabLayo
         viewPager.setAdapter(this);
         tabLayout.setupWithViewPager(viewPager);
 
-        addTab(RecipesFragment.newInstance(1), 0);
-        addTab(CartFragment.newInstance(2), 1);
-        addTab(HistoryFragment.newInstance(3), 2);
+        recipesTab = createTab(0);
+        cartTab = createTab(1);
+        historyTab = createTab(2);
 
         tabLayout.setOnTabSelectedListener(this);
 
-        viewPager.setCurrentItem(0);
+        fragmentList.add(RecipesFragment.newInstance(0));
+        fragmentList.add(CartFragment.newInstance(1));
+        fragmentList.add(HistoryFragment.newInstance(2));
+
+        viewPager.setCurrentItem(1);
     }
 
-    public void addTab(Fragment fragment, int position) {
-        fragmentList.add(position, fragment);
-        tabLayout.getTabAt(position).setIcon(tabIcons[position]).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
+    public TabLayout.Tab createTab(int position) {
+        TabLayout.Tab tab = tabLayout.getTabAt(position);
+        tab.setIcon(tabIcons[position]).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
+        return tab;
     }
 
     @Override
@@ -74,8 +82,7 @@ public class SectionsPageAdapter extends FragmentPagerAdapter implements TabLayo
 
     @Override
     public int getCount() {
-        // Show 3 total pages.
-        return fragmentList.size();
+        return 3;
     }
 
     @Override
