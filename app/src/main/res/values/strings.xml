@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Reciper</string>
     <string name="action_settings">Settings</string>
+    <string name="action_edit_recipe">Edit Recipe</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="recipes_action_mode_title">Remove Recipes</string>
     <string name="recipes_removed_snackbar">Recipes removed</string>
@@ -11,4 +12,10 @@
 
     <string name="empty_recipes">Add a new recipe.</string>
     <string name="empty_cart">Add a new item into cart.</string>
+
+    <string name="button_create_recipe">CREATE</string>
+    <string name="button_update">UPDATE</string>
+    <string name="recipe_name_hint">Recipe Name</string>
+    <string name="recipe_description_hint">Recipe Description</string>
+    <string name="recipe_ingredient_text">Ingredient</string>
 </resources>

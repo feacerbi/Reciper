@@ -64,23 +64,29 @@ public class RecipesActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-
     }
 
     public void setToolbar() {
-        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Set up the ViewPager with the sections adapter.
-        viewPager = (ViewPager) findViewById(R.id.container);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        sectionsPageAdapter = new SectionsPageAdapter(this, getSupportFragmentManager(), viewPager, tabLayout);
+        sectionsPageAdapter = new SectionsPageAdapter(this, getSupportFragmentManager(), fab);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        // Set up the ViewPager with the sections adapter.
+        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPageAdapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(sectionsPageAdapter);
+        sectionsPageAdapter.setIcons(tabLayout);
+
+        viewPager.setCurrentItem(1, true);
+        viewPager.setCurrentItem(0, true);
     }
 
     public Cart getCart() {

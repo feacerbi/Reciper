@@ -88,10 +88,10 @@ public class NewRecipeActivity extends AppCompatActivity {
         //getWindow().setEnterTransition(new Fade());
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        recipePhoto = (ImageView) findViewById(R.id.collection_photo);
-        recipeTitle = (TextView) findViewById(R.id.collection_title);
-        recipeDesc = (TextView) findViewById(R.id.collection_description);
-        recyclerView = (RecyclerView) findViewById(R.id.all_items);
+        recipePhoto = (ImageView) findViewById(R.id.recipe_image);
+        recipeTitle = (TextView) findViewById(R.id.recipe_name);
+        recipeDesc = (TextView) findViewById(R.id.recipe_description);
+        recyclerView = (RecyclerView) findViewById(R.id.recipe_ingredients);
         emptyText = (TextView) findViewById(R.id.empty_text);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
@@ -162,6 +162,8 @@ public class NewRecipeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_edit_recipe:
+                break;
             case R.id.action_settings:
                 break;
         }

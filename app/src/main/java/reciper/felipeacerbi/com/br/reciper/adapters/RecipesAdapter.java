@@ -120,13 +120,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
         if(recipe.getPhotoPath() != null) {
             if(recipe.getPhotoPath() == "cake") {
-                Log.d("Acerbi", "cake1 " + recipe.getName() + " Position:" + position);
                 Glide.with(tm.getAppCompatActivity())
                         .load(R.drawable.cake)
                         .centerCrop()
                         .into(holder.getPhotoField());
             } else {
-                Log.d("Acerbi", "salad " + recipe.getName() + " Position:" + position);
                 Glide.with(tm.getAppCompatActivity())
                         .load(R.drawable.salad)
                         .centerCrop()

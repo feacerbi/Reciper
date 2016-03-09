@@ -106,13 +106,6 @@ public class RecipesFragment extends Fragment implements ActionMode.Callback, Ta
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        fab.setImageResource(R.drawable.plus_sign);
-        fab.show();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 

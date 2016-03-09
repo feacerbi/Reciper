@@ -1,5 +1,6 @@
 package reciper.felipeacerbi.com.br.reciper.adapters;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,10 +9,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import reciper.felipeacerbi.com.br.reciper.Constants;
 import reciper.felipeacerbi.com.br.reciper.R;
 import reciper.felipeacerbi.com.br.reciper.fragments.CartFragment;
 import reciper.felipeacerbi.com.br.reciper.fragments.HistoryFragment;
@@ -22,67 +25,47 @@ import reciper.felipeacerbi.com.br.reciper.fragments.RecipesFragment;
  */
 public class SectionsPageAdapter extends FragmentPagerAdapter implements TabLayout.OnTabSelectedListener {
 
-    public static int TAB_NOT_SELECTED_COLOR = 100;
-    public static int TAB_SELECTED_COLOR = 255;
-
-    private final ViewPager viewPager;
-    private final TabLayout tabLayout;
+    private final FloatingActionButton fab;
     private FragmentManager fragmentManager;
-    private AppCompatActivity activity;
     private List<Fragment> fragmentList;
+    private AppCompatActivity activity;
     private int[] tabIcons = {
             R.drawable.ic_import_contacts_white_24dp,
             R.drawable.ic_shopping_cart_white_24dp,
             R.drawable.ic_history_white_24dp
     };
-    private TabLayout.Tab recipesTab;
-    private TabLayout.Tab cartTab;
-    private TabLayout.Tab historyTab;
+    private int currentTab;
 
-    public SectionsPageAdapter(AppCompatActivity activity, FragmentManager fragmentManager, ViewPager viewPager, final TabLayout tabLayout) {
+    public SectionsPageAdapter(AppCompatActivity activity, FragmentManager fragmentManager, FloatingActionButton fab) {
         super(fragmentManager);
         this.activity = activity;
         this.fragmentManager = fragmentManager;
-        this.viewPager = viewPager;
-        this.tabLayout = tabLayout;
+        this.fab = fab;
 
         fragmentList = new ArrayList<>();
-
-        setTabs();
+        fragmentList.add(RecipesFragment.newInstance(1));
+        fragmentList.add(CartFragment.newInstance(2));
+        fragmentList.add(HistoryFragment.newInstance(3));
     }
 
-    public void setTabs() {
-        viewPager.setAdapter(this);
-        tabLayout.setupWithViewPager(viewPager);
-
-        recipesTab = createTab(0);
-        cartTab = createTab(1);
-        historyTab = createTab(2);
-
-        tabLayout.setOnTabSelectedListener(this);
-
-        fragmentList.add(RecipesFragment.newInstance(0));
-        fragmentList.add(CartFragment.newInstance(1));
-        fragmentList.add(HistoryFragment.newInstance(2));
-
-        viewPager.setCurrentItem(1);
+    public void setIcons(TabLayout tabLayout) {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]).getIcon().setAlpha(Constants.TAB_NOT_SELECTED_COLOR);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]).getIcon().setAlpha(Constants.TAB_NOT_SELECTED_COLOR);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]).getIcon().setAlpha(Constants.TAB_NOT_SELECTED_COLOR);
     }
 
-    public TabLayout.Tab createTab(int position) {
-        TabLayout.Tab tab = tabLayout.getTabAt(position);
-        tab.setIcon(tabIcons[position]).getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
-        return tab;
+    public int getCurrentTab() {
+        return currentTab;
     }
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
         return fragmentList.get(position);
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return fragmentList.size();
     }
 
     @Override
@@ -93,13 +76,24 @@ public class SectionsPageAdapter extends FragmentPagerAdapter implements TabLayo
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         int position = tab.getPosition();
-        tab.getIcon().setAlpha(TAB_SELECTED_COLOR);
-        fragmentList.get(position).onResume();
+        switch (position) {
+            case 0:
+                fab.setImageResource(R.drawable.plus_sign);
+                fab.show();
+                break;
+            case 1:
+                fab.setImageResource(R.drawable.ic_done_white_24dp);
+                fab.show();
+                break;
+            case 2:
+                fab.hide();
+        }
+        tab.getIcon().setAlpha(Constants.TAB_SELECTED_COLOR);
     }
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-        tab.getIcon().setAlpha(TAB_NOT_SELECTED_COLOR);
+        tab.getIcon().setAlpha(Constants.TAB_NOT_SELECTED_COLOR);
     }
 
     @Override

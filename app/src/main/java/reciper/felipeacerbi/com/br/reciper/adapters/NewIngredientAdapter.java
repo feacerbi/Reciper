@@ -1,13 +1,12 @@
 package reciper.felipeacerbi.com.br.reciper.adapters;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,45 +17,42 @@ import java.util.List;
 import reciper.felipeacerbi.com.br.reciper.R;
 import reciper.felipeacerbi.com.br.reciper.interfaces.TaskManager;
 import reciper.felipeacerbi.com.br.reciper.models.Ingredient;
-import reciper.felipeacerbi.com.br.reciper.models.Recipe;
 import reciper.felipeacerbi.com.br.reciper.models.RecipeItem;
 
 /**
  * Created by felipe.acerbi on 28/09/2015.
  */
-public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.ViewHolder> {
+public class NewIngredientAdapter extends RecyclerView.Adapter<NewIngredientAdapter.ViewHolder> {
 
     private final TaskManager tm;
     private final SparseBooleanArray selectedItems;
     private List<RecipeItem> recipeItems;
     private SparseBooleanArray oldSelectedPositions;
+    private List<RecipeItem> deleteList;
+    private boolean remove;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView nameField;
-        private final TextView descField;
         private final ImageView photoField;
         private final TextView quantField;
         private final TextView unitField;
+        private final ImageView removeButton;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             nameField = (TextView) itemView.findViewById(R.id.ingredient_name);
-            descField = (TextView) itemView.findViewById(R.id.ingredient_description);
             quantField = (TextView) itemView.findViewById(R.id.ingredient_quantity);
             unitField = (TextView) itemView.findViewById(R.id.ingredient_unit);
             photoField = (ImageView) itemView.findViewById(R.id.ingredient_image);
+            removeButton = (ImageView) itemView.findViewById(R.id.remove_ingredient_icon);
 
         }
 
         public TextView getNameField() {
             return nameField;
-        }
-
-        public TextView getDescField() {
-            return descField;
         }
 
         public ImageView getPhotoField() {
@@ -70,9 +66,13 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
         public TextView getUnitField() {
             return unitField;
         }
+
+        public ImageView getRemoveButton() {
+            return removeButton;
+        }
     }
 
-    public RecipeItemsAdapter(TaskManager tm, List<RecipeItem> recipeItems) {
+    public NewIngredientAdapter(TaskManager tm, List<RecipeItem> recipeItems) {
         this.tm = tm;
         this.recipeItems = recipeItems;
         selectedItems = new SparseBooleanArray();
@@ -81,25 +81,18 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_list_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_ingredient_list_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final RecipeItem recipeItem = getRecipeItems().get(position);
         Ingredient ingredient = recipeItem.getIngredient();
 
         holder.getNameField().setText(ingredient.getName());
-        holder.getDescField().setText(ingredient.getDescription());
         holder.getQuantField().setText(String.valueOf(recipeItem.getQuantity()));
-        holder.getUnitField().setText(" " + recipeItem.getUnit());
-
-        if(selectedItems.get(position, false)) {
-            holder.itemView.setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(R.color.fadeImage));
-        } else {
-            holder.itemView.setBackgroundColor(tm.getAppCompatActivity().getResources().getColor(android.R.color.transparent));
-        }
+        holder.getUnitField().setText(recipeItem.getUnit());
 
         if(ingredient.getPhotoPath() != null) {
             if(ingredient.getPhotoPath().equals("chocolate")) {
@@ -120,6 +113,37 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
                     .into(holder.getPhotoField());
         }
 
+        holder.getRemoveButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(position);
+                deleteList = getSelectedItems();
+                getRecipeItems().remove(recipeItem);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, getItemCount());
+                remove = true;
+                Snackbar.make(tm.getAppCompatActivity().findViewById(R.id.coordinator),
+                        recipeItem.getIngredient().getName() + " category removed",
+                        Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                add(recipeItem, position);
+                                remove = false;
+                            }
+                        }).setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if (remove) {
+                            //new RemoveTask(context).execute(deleteList);
+                        }
+                        deselectAll();
+                        super.onDismissed(snackbar, event);
+                    }
+                }).show();
+            }
+        });
+
 //        holder.getPhotoField().setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -127,39 +151,21 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
 //                    fullImage(recipe.getPhotoPath());
 //            }
 //        });
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tm.isActionMode()) {
-                    select(holder.getAdapterPosition());
-                } else {
-//                    Intent intent = new Intent(activity, NewItemActivity.class);
-//                    intent.putExtra("collection_item", item);
-//                    intent.putExtra("collection_storage", storage);
-//                    intent.putExtra("position", position);
-//                    activity.startActivityForResult(intent, Constants.REQUEST_MODIFY_COLLECTION_ITEM);
-                }
-            }
-        });
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                tm.getAppCompatActivity().startSupportActionMode(tm.getActionModeCallback());
-                select(holder.getAdapterPosition());
-                return true;
-            }
-        });
     }
 
     public List<RecipeItem> getRecipeItems() {
         return recipeItems;
     }
 
+    public void add(RecipeItem recipeItem, int position) {
+        getRecipeItems().add(position, recipeItem);
+        notifyItemInserted(position);
+        notifyItemRangeChanged(position, getItemCount());
+    }
+
     @Override
     public int getItemCount() {
-        return recipeItems.size();
+        return getRecipeItems().size();
     }
 
     public void select(int position) {
@@ -168,58 +174,17 @@ public class RecipeItemsAdapter extends RecyclerView.Adapter<RecipeItemsAdapter.
         } else {
             selectedItems.put(position, true);
         }
-        notifyItemChanged(position);
-
-        int selectedCount = getSelectedItemsCount();
-        tm.getActionMode().setTitle(String.valueOf(selectedCount));
     }
 
     public void deselectAll() {
-        oldSelectedPositions = selectedItems.clone();
-        notifyItemsChanged();
+        notifyItemRangeChanged(0, getItemCount());
         selectedItems.clear();
     }
 
-    public int getSelectedItemsCount(){ return selectedItems.size(); }
-
     public List<RecipeItem> getSelectedItems() {
-        List<RecipeItem> selectedObjects = new ArrayList<>(getSelectedItemsCount());
-        for (int i = 0; i < getSelectedItemsCount(); i++) {
-            selectedObjects.add(getRecipeItems().get(selectedItems.keyAt(i)));
-        }
+        List<RecipeItem> selectedObjects = new ArrayList<>(1);
+        selectedObjects.add(getRecipeItems().get(selectedItems.keyAt(0)));
         return selectedObjects;
-    }
-
-    public void notifyItemsRemoved() {
-        for(int i = 0; i < getSelectedItemsCount(); i++) {
-            int position = selectedItems.keyAt(i);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, getItemCount());
-        }
-        getRecipeItems().removeAll(getSelectedItems());
-    }
-
-    public void notifyItemsInserted(List<RecipeItem> ingredients) {
-        for(int i = 0; i < oldSelectedPositions.size(); i++) {
-            int position = oldSelectedPositions.keyAt(i);
-            getRecipeItems().add(position, ingredients.get(i));
-            notifyItemInserted(position);
-            notifyItemRangeChanged(position, getItemCount());
-        }
-    }
-
-    public void notifyNewItemInserted(RecipeItem recipeItem) {
-        getRecipeItems().add(recipeItem);
-        int position = getItemCount();
-        notifyItemInserted(position);
-        notifyItemRangeChanged(position, getItemCount());
-    }
-
-    public void notifyItemsChanged() {
-        for(int i = 0; i < getSelectedItemsCount(); i++) {
-            int position = selectedItems.keyAt(i);
-            notifyItemChanged(position);
-        }
     }
 
 //    public void fullImage(String path) {
