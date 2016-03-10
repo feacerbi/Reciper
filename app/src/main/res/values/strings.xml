@@ -16,6 +16,8 @@
     <string name="button_create_recipe">CREATE</string>
     <string name="button_update">UPDATE</string>
     <string name="recipe_name_hint">Recipe Name</string>
-    <string name="recipe_description_hint">Recipe Description</string>
+    <string name="recipe_description_hint">How To</string>
+    <string name="recipe_portions_hint">Portions</string>
+    <string name="recipe_time_hint">Duration</string>
     <string name="recipe_ingredient_text">Ingredient</string>
 </resources>

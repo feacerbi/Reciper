@@ -10,7 +10,7 @@ public class Unit {
     public static int LITER = 2;
     public static String MILLILITER = "ml";
     public static String GRAM = "g";
-    public static int KILOGRAM = 5;
+    public static String KILOGRAM = "Kg";
     public static String OZ = "oz";
 
     private long id;
